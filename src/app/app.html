@@ -5,21 +5,27 @@
     <header class="todoapp__header">
       <button type="button" class="todoapp__toggle-all active" data-cy="ToggleAllButton"></button>
 
-      <form>
+      <form (ngSubmit)="addTodo()">
         <input
-          data-cy="NewTodoField"
           type="text"
           class="todoapp__new-todo"
           placeholder="What needs to be done?"
+          name="title"
+          [(ngModel)]="title"
         />
       </form>
     </header>
 
     <section class="todoapp__main" data-cy="TodoList">
-      @for (todo of todos; track todo.id) {
+      @for (todo of todos; track todo.id; let i = $index) {
         <div data-cy="Todo" class="todo" [class.completed]="todo.completed">
           <label class="todo__status-label">
-            <input data-cy="TodoStatus" type="checkbox" class="todo__status" checked />
+            <input
+              data-cy="TodoStatus"
+              type="checkbox"
+              class="todo__status"
+              [(ngModel)]="todo.completed"
+            />
           </label>
           @if (editing) {
             <form>
@@ -35,70 +41,27 @@
             <ng-container>
               <span data-cy="TodoTitle" class="todo__title"> {{ todo.title }} </span>
 
-              <button type="button" class="todo__remove" data-cy="TodoDelete">×</button>
+              <button
+                type="button"
+                class="todo__remove"
+                data-cy="TodoDelete"
+                (click)="todos.splice(i, 1)"
+              >
+                ×
+              </button>
             </ng-container>
           }
 
-          <div data-cy="TodoLoader" class="modal overlay">
+          <div data-cy="TodoLoader" class="modal overlay" [class.is-active]="false">
             <div class="modal-background has-background-white-ter"></div>
             <div class="loader"></div>
           </div>
         </div>
       }
-
-      <div data-cy="Todo" class="todo">
-        <label class="todo__status-label">
-          <input data-cy="TodoStatus" type="checkbox" class="todo__status" />
-        </label>
-
-        <span data-cy="TodoTitle" class="todo__title"> Not Completed Todo </span>
-        <button type="button" class="todo__remove" data-cy="TodoDelete">×</button>
-
-        <div data-cy="TodoLoader" class="modal overlay">
-          <div class="modal-background has-background-white-ter"></div>
-          <div class="loader"></div>
-        </div>
-      </div>
-
-      <div data-cy="Todo" class="todo">
-        <label class="todo__status-label">
-          <input data-cy="TodoStatus" type="checkbox" class="todo__status" />
-        </label>
-
-        <form>
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            class="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form>
-
-        <div data-cy="TodoLoader" class="modal overlay">
-          <div class="modal-background has-background-white-ter"></div>
-          <div class="loader"></div>
-        </div>
-      </div>
-
-      <div data-cy="Todo" class="todo">
-        <label class="todo__status-label">
-          <input data-cy="TodoStatus" type="checkbox" class="todo__status" />
-        </label>
-
-        <span data-cy="TodoTitle" class="todo__title"> Todo is being saved now </span>
-
-        <button type="button" class="todo__remove" data-cy="TodoDelete">×</button>
-
-        <div data-cy="TodoLoader" class="modal overlay is-active">
-          <div class="modal-background has-background-white-ter"></div>
-          <div class="loader"></div>
-        </div>
-      </div>
     </section>
 
     <footer class="todoapp__footer" data-cy="Footer">
-      <span class="todo-count" data-cy="TodosCounter"> 3 items left </span>
+      <span class="todo-count" data-cy="TodosCounter"> {{ ActiveTodos.length }} items left </span>
 
       <nav class="filter" data-cy="Filter">
         <a href="#/" class="filter__link selected" data-cy="FilterLinkAll"> All </a>
