@@ -1,0 +1,27 @@
+<div data-cy="Todo" class="todo" [class.completed]="todo.completed">
+  <label class="todo__status-label">
+    <input type="checkbox" class="todo__status" [checked]="todo.completed" [(ngModel)]="todo.completed" />
+  </label>
+  @if (editing) {
+    <form>
+      <input
+        data-cy="TodoTitleField"
+        type="text"
+        class="todo__title-field"
+        placeholder="Empty todo will be deleted"
+        value="Todo is being edited now"
+      />
+    </form>
+  } @else {
+    <span data-cy="TodoTitle" class="todo__title"> {{ todo.title }} </span>
+
+    <button type="button" class="todo__remove" (click)="delete.emit( )">
+      ×
+    </button>
+  }
+
+  <div data-cy="TodoLoader" class="modal overlay" [class.is-active]="false">
+    <div class="modal-background has-background-white-ter"></div>
+    <div class="loader"></div>
+  </div>
+</div>
